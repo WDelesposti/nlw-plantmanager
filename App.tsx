@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Welcome } from "./src/pages/Welcome";
 import * as SplashScreen from "expo-splash-screen";
 import { Jost_400Regular, Jost_600SemiBold } from "@expo-google-fonts/jost";
 import * as Font from "expo-font";
 import { View } from "react-native";
+
+import Routes from "./src/routes/";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -37,7 +38,7 @@ export default function App() {
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <Welcome />
+      <Routes />
     </View>
   );
 }
