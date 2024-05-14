@@ -1,12 +1,24 @@
 import React from "react";
 import { Text, SafeAreaView, StyleSheet, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { Button } from "../components/Button";
 
 import colors from "../styles/colors";
 import fonts from "../styles/fonts";
 
+export type PlantSelectParamList = {
+  PlantSelect: undefined;
+};
+
 export function Confirmation() {
+  const navigation = useNavigation<NativeStackNavigationProp<PlantSelectParamList>>();
+  
+  function handleMoveOn() {
+    navigation.navigate('PlantSelect');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -17,7 +29,7 @@ export function Confirmation() {
           plantinhas com muito cuidado.
         </Text>
         <View style={styles.footer}>
-          <Button title="Começar" />
+          <Button title="Começar" onPress={handleMoveOn} />
         </View>
       </View>
     </SafeAreaView>
