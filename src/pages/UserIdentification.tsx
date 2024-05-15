@@ -17,9 +17,10 @@ import colors from "../styles/colors";
 import fonts from "../styles/fonts";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type ConfirmationParamList = {
-  Confirmation: object;
+  Confirmation: undefined;
 };
 
 export function UserIdentification() {
@@ -42,8 +43,12 @@ export function UserIdentification() {
     setName(value);
   }
 
-  function handleSubmit(name: string) {
-    navigation.navigate("Confirmation", { name });
+  async function handleSubmit(name: string) {
+    if (!name) {
+      return alert("Me diz como chamar você 😢");
+    }
+    await AsyncStorage.setItem("@plantmanager:user", name);
+    navigation.navigate("Confirmation");
   }
 
   return (
