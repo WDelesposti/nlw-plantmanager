@@ -21,7 +21,13 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type ConfirmationParamList = {
-  Confirmation: undefined;
+  Confirmation: {
+    title: string;
+    subtitle: string;
+    buttonTitle: string;
+    icon: "smile" | "hug";
+    nextScreen: "PlantSelect" | "MyPlants";
+  };
 };
 
 export function UserIdentification() {
@@ -50,10 +56,17 @@ export function UserIdentification() {
     }
     try {
       await AsyncStorage.setItem("@plantmanager:user", name);
+      navigation.navigate("Confirmation", {
+        title: "Prontinho",
+        subtitle:
+          "Agora vamos começar a cuidar das suas plantinhas com muito cuidado.",
+        buttonTitle: "Começar",
+        icon: "smile",
+        nextScreen: "PlantSelect",
+      });
     } catch {
       return Alert.alert("Não foi possível salvar o seu nome 😢");
     }
-    navigation.navigate("Confirmation");
   }
 
   return (

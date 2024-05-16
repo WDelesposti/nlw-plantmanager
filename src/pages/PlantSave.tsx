@@ -13,12 +13,14 @@ import { useRoute } from "@react-navigation/core";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { isBefore, format } from "date-fns";
 
-import waterdrop from "../assets/waterdrop.png";
 import { Button } from "../components/Button";
 import colors from "../styles/colors";
 import fonts from "../styles/fonts";
+import waterdrop from "../assets/waterdrop.png";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 import { PlantProps, loadPlant, savePlant } from "../libs/storage";
 
@@ -26,12 +28,25 @@ interface Params {
   plant: PlantProps;
 }
 
+export type ConfirmationParamList = {
+  Confirmation: {
+    title: string;
+    subtitle: string;
+    buttonTitle: string;
+    icon: "smile" | "hug";
+    nextScreen: "PlantSelect" | "MyPlants";
+  };
+};
+
 export function PlantSave() {
   const [selectedDateTime, setSelectedDateTime] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(Platform.OS === "ios");
 
   const route = useRoute();
   const { plant } = route.params as Params;
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<ConfirmationParamList>>();
 
   function handleChangeTime(
     event: DateTimePickerEvent,
@@ -53,11 +68,20 @@ export function PlantSave() {
 
   async function handleSave() {
     const data = await loadPlant();
-    console.log(data)
+    console.log(data);
     try {
       savePlant({
         ...plant,
         dateTimeNotification: selectedDateTime,
+      });
+
+      navigation.navigate("Confirmation", {
+        title: "Tudo Certo",
+        buttonTitle: "Muito Obrigado 😀",
+        subtitle:
+          "Fique tranquilo que sempre vamos lembrar você de cuidar da sua plantinha com muito cuidado.",
+        icon: "hug",
+        nextScreen: "MyPlants",
       });
     } catch {
       Alert.alert("Não foi possível salvar. 😢");
