@@ -9,6 +9,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 
 import { Button } from "../components/Button";
@@ -45,9 +46,13 @@ export function UserIdentification() {
 
   async function handleSubmit(name: string) {
     if (!name) {
-      return alert("Me diz como chamar você 😢");
+      return Alert.alert("Me diz como chamar você 😢");
     }
-    await AsyncStorage.setItem("@plantmanager:user", name);
+    try {
+      await AsyncStorage.setItem("@plantmanager:user", name);
+    } catch {
+      return Alert.alert("Não foi possível salvar o seu nome 😢");
+    }
     navigation.navigate("Confirmation");
   }
 

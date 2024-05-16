@@ -20,7 +20,7 @@ import { Button } from "../components/Button";
 import colors from "../styles/colors";
 import fonts from "../styles/fonts";
 import { getBottomSpace } from "react-native-iphone-x-helper";
-import { PlantProps } from "../libs/storage";
+import { PlantProps, loadPlant, savePlant } from "../libs/storage";
 
 interface Params {
   plant: PlantProps;
@@ -48,6 +48,19 @@ export function PlantSave() {
 
     if (dateTime) {
       setSelectedDateTime(dateTime);
+    }
+  }
+
+  async function handleSave() {
+    const data = await loadPlant();
+    console.log(data)
+    try {
+      savePlant({
+        ...plant,
+        dateTimeNotification: selectedDateTime,
+      });
+    } catch {
+      Alert.alert("Não foi possível salvar. 😢");
     }
   }
 
@@ -91,7 +104,7 @@ export function PlantSave() {
           </TouchableOpacity>
         )}
 
-        <Button title="Cadastrar planta" onPress={() => {}} />
+        <Button title="Cadastrar planta" onPress={handleSave} />
       </View>
     </View>
   );
